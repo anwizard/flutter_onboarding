@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MaterialApp(title: 'Onboarding', home: SplashScreen()));
+  //runApp(const MaterialApp(title: 'Onboarding', home: MainScreen()));
 }
 
 class SplashScreen extends StatefulWidget {
@@ -15,11 +16,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 1), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const SplashScreen2()),
+          MaterialPageRoute(builder: (context) => const MainScreen()),
         );
       }
     });
@@ -62,7 +63,7 @@ class _SplashScreenState2 extends State<SplashScreen2> {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const SplashScreen3()),
+          MaterialPageRoute(builder: (context) => const MainScreen()),
         );
       }
     });
@@ -75,42 +76,6 @@ class _SplashScreenState2 extends State<SplashScreen2> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/1.png'),
-            fit: BoxFit.contain,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SplashScreen3 extends StatefulWidget {
-  const SplashScreen3({super.key});
-
-  @override
-  State<SplashScreen3> createState() => _SplashScreenState3();
-}
-
-class _SplashScreenState3 extends State<SplashScreen3> {
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const PasswordScreen()),
-        );
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/2.png'),
             fit: BoxFit.contain,
           ),
         ),
@@ -132,16 +97,121 @@ class MainScreen extends StatelessWidget {
           ),
         ),
         body: Center(
-          child: TextFieldInputScreen(
-            onSubmit: (text) {
-              print(text);
-              Navigator.push(
-                context,
-                MaterialPageRoute<void>(
-                  builder: (context) => ProfileCompletionScreen(),
-                ),
-              );
-            },
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Row(
+                  children: <Widget>[
+                    Expanded(flex: 10, child: Container()),
+                    Expanded(
+                      flex: 15, 
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(50),
+                            bottomRight: Radius.circular(50),
+                          ),
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [Colors.red, Colors.white, Colors.white, Colors.blue],
+                            stops: [0.0, 0.4, 0.6, 1.0],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 10,
+                              blurRadius: 15,
+                              offset: Offset(0, 3), // Changes position of shadow (x, y)
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(flex: 1, child: Container()),
+                            Column(
+                              children: [
+                                Expanded(flex: 1, child: Container()),
+                                Text('Start Experiencing'),
+                                Text('Your'),
+                                Text('STUDENT LIFE'),
+                                Text('NOW'),
+                                SizedBox(height: 50)
+                              ],
+                            ),
+                            Expanded(flex: 1, child: Container()),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(flex: 10, child: Container()),
+                  ],
+                )
+              ),
+              SizedBox(height: 30),
+              Container(
+                child: Column(
+                  children: [
+                    Text('Discover, manage and connect to your student life.'),
+                    SizedBox(height: 15),
+                    Row(
+                      children: <Widget>[
+                        Expanded(flex: 1, child: Container()),
+                        Expanded(
+                          flex: 1, 
+                          child: Column(
+                            children: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute<void>(
+                                      builder: (context) => PasswordScreen(),
+                                    ),
+                                  );
+                                },
+                                style: TextButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(vertical: 23.0),
+                                  backgroundColor: Colors.blueGrey.shade900,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Continue with Email',
+                                    style: TextStyle(
+                                      color: Colors.white, // Using a basic material color
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 15),
+                              TextButton(
+                                onPressed: () {},
+                                style: TextButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(vertical: 23.0),
+                                  backgroundColor: Colors.grey.shade300,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Sign In',
+                                    style: TextStyle(
+                                      color: Colors.white, // Using a basic material color
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(flex: 1, child: Container()),
+                      ]
+                    ),
+                    SizedBox(height: 15),
+                    Text("By continuing, you agree to Student Life's Terms of Use."),
+                    SizedBox(height: 30),
+                  ]
+                )
+              ),
+            ]
           ),
         ),
       ),
@@ -215,6 +285,121 @@ class TextFieldInputScreen extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   hintText: 'School Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(35)),
+                  ),
+                ),
+                controller: _textEditingController,
+                autofocus: true,
+                onSubmitted: (input) {
+                  _onSubmit();
+                },
+              ),
+            ),
+            Expanded(flex: 2, child: Container()),
+          ],
+        ),
+        //SizedBox(height: 150), // Space between TextField and Submit Button
+        Expanded(flex: 8, child: Container()),
+        Row (
+          children: <Widget>[
+            Expanded(flex: 2, child: Container()),
+            Expanded(
+            flex: 2, 
+            child: TextButton(
+              onPressed: () {
+                _onSubmit();
+              },
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 23.0),
+                backgroundColor: Colors.blueGrey.shade900,
+              ),
+              child: Center(
+                child: Text(
+                  'Next',
+                  style: TextStyle(
+                    color: Colors.white, // Using a basic material color
+                  ),
+                ),
+              ),
+            ),
+            ), 
+            Expanded(flex: 2, child: Container()),
+          ]
+        ),
+        Expanded(flex: 1, child: Container()),
+      ],
+    );
+  } 
+}
+
+class PinScreen extends StatelessWidget {
+  const PinScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Align(
+            alignment: Alignment.center,
+          ),
+        ),
+        body: Center(
+          child: PinInputScreen(
+            onSubmit: (text) {
+              print(text);
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (context) => ProfileCompletionScreen(),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PinInputScreen extends StatelessWidget {
+  PinInputScreen({super.key, required this.onSubmit});
+
+  final void Function(String) onSubmit;
+
+  final TextEditingController _textEditingController = TextEditingController();
+
+  void _onSubmit() {
+    onSubmit(_textEditingController.text);
+    _textEditingController.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(6), 
+          decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(36),
+          ),
+          child: Icon(Icons.mail, size: 50),
+        ),
+        SizedBox(height: 30), // Space between Icon and Upper Big Text
+        Text('Enter Verification Code', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        Text('We sent a verification code to your email', style: TextStyle(fontSize: 13)),
+        Text('@smcl.edu.ph', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
+        SizedBox(height: 27), // Space Lower Small Text and TextField
+        Row (
+          children: <Widget>[
+            Expanded(flex: 2, child: Container()),
+            Expanded(
+              flex: 2, 
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'lorem ipsum',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(35)),
                   ),
