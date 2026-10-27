@@ -1,7 +1,9 @@
+import 'dart:math';
+import 'dart:ui' show lerpDouble;
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MaterialApp(title: 'Onboarding', home: SplashScreen()));
+  runApp(const MaterialApp(title: 'Onboarding', home: SplashScreen(), debugShowCheckedModeBanner: false));
   //runApp(const MaterialApp(title: 'Onboarding', home: MainScreen()));
 }
 
@@ -89,20 +91,20 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rng = Random(42);
+    const lanes = 8;
+    final screen = MediaQuery.sizeOf(context);
+    final laneHeight = screen.height / lanes;
+    final squareSize = laneHeight * 0.7;
+
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Align(
-            alignment: Alignment.center,
-          ),
-        ),
         body: Center(
           child: Column(
             children: <Widget>[
               Expanded(
                 child: Row(
                   children: <Widget>[
-                    Expanded(flex: 10, child: Container()),
                     Expanded(
                       flex: 15, 
                       child: Container(
@@ -119,7 +121,7 @@ class MainScreen extends StatelessWidget {
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
+                              color: Colors.grey.withValues(alpha: 0.5),
                               spreadRadius: 10,
                               blurRadius: 15,
                               offset: Offset(0, 3), // Changes position of shadow (x, y)
@@ -131,12 +133,16 @@ class MainScreen extends StatelessWidget {
                             Expanded(flex: 1, child: Container()),
                             Column(
                               children: [
-                                Expanded(flex: 1, child: Container()),
+                                //Expanded(flex: 1, child: Container()),
+                                Expanded(
+                                  child: SquaresArea()
+                                ),
+                                SizedBox(height: 50),
                                 Text('Start Experiencing'),
                                 Text('Your'),
                                 Text('STUDENT LIFE'),
                                 Text('NOW'),
-                                SizedBox(height: 50)
+                                SizedBox(height: 20)
                               ],
                             ),
                             Expanded(flex: 1, child: Container()),
@@ -144,7 +150,6 @@ class MainScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Expanded(flex: 10, child: Container()),
                   ],
                 )
               ),
@@ -158,7 +163,7 @@ class MainScreen extends StatelessWidget {
                       children: <Widget>[
                         Expanded(flex: 1, child: Container()),
                         Expanded(
-                          flex: 1, 
+                          flex: 15, 
                           child: Column(
                             children: <Widget>[
                               TextButton(
@@ -281,7 +286,7 @@ class TextFieldInputScreen extends StatelessWidget {
           children: <Widget>[
             Expanded(flex: 2, child: Container()),
             Expanded(
-              flex: 2, 
+              flex: 24, 
               child: TextField(
                 decoration: InputDecoration(
                   hintText: 'School Email',
@@ -305,7 +310,7 @@ class TextFieldInputScreen extends StatelessWidget {
           children: <Widget>[
             Expanded(flex: 2, child: Container()),
             Expanded(
-            flex: 2, 
+            flex: 24, 
             child: TextButton(
               onPressed: () {
                 _onSubmit();
@@ -318,7 +323,7 @@ class TextFieldInputScreen extends StatelessWidget {
                 child: Text(
                   'Next',
                   style: TextStyle(
-                    color: Colors.white, // Using a basic material color
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -450,17 +455,12 @@ class PinInputScreen extends StatelessWidget {
 
 // Profile Screen
 class ProfileCompletionScreen extends StatelessWidget {
-  ProfileCompletionScreen({super.key});
+  const ProfileCompletionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Align(
-            alignment: Alignment.center,
-          ),
-        ),
         body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -474,6 +474,7 @@ class ProfileCompletionScreen extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 // The pfp icon
+                SizedBox(height: 30),
                 Container(
                   padding: const EdgeInsets.all(6), 
                   decoration: BoxDecoration(
@@ -496,7 +497,6 @@ class ProfileCompletionScreen extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Expanded(flex: 1, child: Container()),
-                    Expanded(flex: 2, child: Container()),
                     Expanded(flex: 4, child:Text('Your Name', textAlign: TextAlign.left)),
                     Expanded(flex: 3, child: Container()),
                   ]
@@ -506,7 +506,7 @@ class ProfileCompletionScreen extends StatelessWidget {
                   children: <Widget>[
                     Expanded(flex: 2, child: Container()),
                     Expanded(
-                      flex: 3, 
+                      flex: 24, 
                       child: TextField(
                         decoration: InputDecoration(
                           hintText: 'Your Name',
@@ -525,7 +525,6 @@ class ProfileCompletionScreen extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Expanded(flex: 1, child: Container()),
-                    Expanded(flex: 2, child: Container()),
                     Expanded(flex: 4, child:Text('Your Bio', textAlign: TextAlign.left)),
                     Expanded(flex: 3, child: Container()),
                   ]
@@ -535,7 +534,7 @@ class ProfileCompletionScreen extends StatelessWidget {
                   children: <Widget>[
                     Expanded(flex: 2, child: Container()),
                     Expanded(
-                      flex: 3, 
+                      flex: 24, 
                       child: TextField(
                         keyboardType: TextInputType.multiline,
                         minLines: 1,
@@ -556,7 +555,7 @@ class ProfileCompletionScreen extends StatelessWidget {
                   children: <Widget>[
                     Expanded(flex: 2, child: Container()),
                     Expanded(
-                    flex: 2, 
+                    flex: 24, 
                     child: TextButton(
                       onPressed: () {},
                       style: TextButton.styleFrom(
@@ -581,6 +580,136 @@ class ProfileCompletionScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+// ============================================================================================================
+// Not screens
+
+class SquaresArea extends StatelessWidget {
+  const SquaresArea({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final rng = Random(42);
+    const lanes = 3;
+
+    return Container(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final screen = MediaQuery.sizeOf(context);
+          final width =
+              constraints.hasBoundedWidth ? constraints.maxWidth : screen.width;
+          final height =
+              constraints.hasBoundedHeight ? constraints.maxHeight : screen.height;
+          final laneHeight = height / lanes;
+          final squareSize = laneHeight * 0.7;
+
+          return SizedBox(
+            width: width,
+            height: height,
+            child: Stack(
+              children: [
+                for (var i = 0; i < lanes; i++)
+                  MovingSquare(
+                    key: ValueKey(i),
+                    imageUrl: 'https://picsum.photos/seed/$i/200',
+                    size: squareSize,
+                    top: i * laneHeight + (laneHeight - squareSize) / 2,
+                    screenWidth: width,
+                    duration: Duration(milliseconds: 3000 + rng.nextInt(7000)),
+                    startAt: rng.nextDouble(),
+                  ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class MovingSquare extends StatefulWidget {
+  const MovingSquare({
+    super.key,
+    required this.imageUrl,
+    required this.size,
+    required this.top,
+    required this.screenWidth,
+    required this.duration,
+    this.startAt = 0,
+  });
+ 
+  final String imageUrl;
+  final double size;
+  final double top;
+  final double screenWidth;
+  final Duration duration;
+  final double startAt;
+ 
+  @override
+  State<MovingSquare> createState() => _MovingSquareState();
+}
+ 
+class _MovingSquareState extends State<MovingSquare>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+ 
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this, // the Ticker that fires once per frame
+      duration: widget.duration,
+    )
+      ..value = widget.startAt // begin partway through the trip
+      ..repeat(); // loop 0 -> 1 forever
+  }
+ 
+  @override
+  void dispose() {
+    _controller.dispose(); // always release the ticker
+    super.dispose();
+  }
+ 
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: widget.top,
+      left: 0,
+      child: AnimatedBuilder(
+        animation: _controller,
+        // Built once, reused every frame (it never changes).
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: SizedBox(
+            width: widget.size,
+            height: widget.size,
+            child: Image.network(
+              widget.imageUrl,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(
+                color: Colors.primaries[widget.size.hashCode %
+                    Colors.primaries.length],
+              ),
+            ),
+          ),
+        ),
+        builder: (context, child) {
+          // Map controller value 0..1 to an x position:
+          // start just off the left edge, end just off the right edge.
+          final x = lerpDouble(
+            widget.screenWidth,
+            -widget.size,
+            _controller.value,
+          )!;
+          return Transform.translate(
+            offset: Offset(x, 0),
+            child: child,
+          );
+        },
       ),
     );
   }
